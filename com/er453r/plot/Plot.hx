@@ -1,5 +1,7 @@
 package com.er453r.plot;
 
+import js.html.svg.TextElement;
+import js.html.svg.TextContentElement;
 import com.er453r.plot.PlotUtils;
 import js.html.svg.PathElement;
 import js.html.svg.SVGElement;
@@ -12,6 +14,9 @@ class Plot {
 
 	private var width:UInt;
 	private var height:UInt;
+
+	private var min:TextElement;
+	private var max:TextElement;
 
 	public function new(width:UInt, height:UInt, selector:String = "body") {
 		this.width = width;
@@ -30,6 +35,20 @@ class Plot {
 		path.setAttribute("fill-opacity", "0");
 
 		path.setAttribute("d", "M 0 0 L 100 100");
+
+		min = cast Browser.document.createElementNS("http://www.w3.org/2000/svg", "text");
+		min.innerHTML = "min";
+		min.setAttribute("x", "10");
+		min.setAttribute("y", '${height-30}');
+
+		svg.appendChild(min);
+
+		max = cast Browser.document.createElementNS("http://www.w3.org/2000/svg", "text");
+		max.innerHTML = "max";
+		max.setAttribute("x", "10");
+		max.setAttribute("y", "10");
+
+		svg.appendChild(max);
 
 		Browser.document.querySelector(selector).appendChild(svg);
 	}
@@ -57,6 +76,9 @@ class Plot {
 			else
 				pathString += ' L ${x} ${y}';
 		}
+
+		this.min.innerHTML = '${min}';
+		this.max.innerHTML = '${max}';
 
 		path.setAttribute("d", pathString);
 	}
